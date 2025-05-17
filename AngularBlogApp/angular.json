@@ -20,17 +20,23 @@
             "outputPath": "dist/angular-blog-app",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.scss"
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.scss",
+              {
+                "input": "src/app/themes/theme-dark.scss",
+                "bundleName": "theme-dark",
+                "inject": false
+              },
+              {
+                "input": "src/app/themes/theme-light.scss",
+                "bundleName": "theme-light",
+                "inject": false
+              }
             ],
             "scripts": []
           },
@@ -65,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "AngularBlogApp:build:production"
+              "buildTarget": "AngularBlogApp:build:production"
             },
             "development": {
-              "browserTarget": "AngularBlogApp:build:development"
+              "buildTarget": "AngularBlogApp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,25 +82,17 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "AngularBlogApp:build"
+            "buildTarget": "AngularBlogApp:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
