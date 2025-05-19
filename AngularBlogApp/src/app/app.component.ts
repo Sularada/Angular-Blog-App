@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { DenemeComponent } from './components/deneme/deneme.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { HomepageComponent } from './pages/homepage/homepage.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

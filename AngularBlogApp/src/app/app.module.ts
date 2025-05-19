@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DenemeComponent } from "./components/deneme/deneme.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
+import { HomepageComponent } from "./pages/homepage/homepage.component";
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,9 +19,10 @@ import { NavbarComponent } from "./components/navbar/navbar.component";
     AppRoutingModule,
     BrowserAnimationsModule,
     DenemeComponent,
-    NavbarComponent
+    NavbarComponent,
+    HomepageComponent
   ],
-  providers: [],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
