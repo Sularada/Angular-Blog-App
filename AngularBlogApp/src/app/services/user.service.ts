@@ -22,15 +22,25 @@ export class UserService {
     )
   }
 
-  public getCurrentUser(): Observable<User> {
-    const options = {
+  public isUserLogged(): Boolean {
+    const token = localStorage.getItem("accessToken")
+    return token && token !== '' ? true : false;
+  }
+
+  public Logout(): void {
+    localStorage.setItem("accessToken",'');
+  }
+
+  public getUser():Observable<User>{
+      const token = localStorage.getItem("accessToken");
+       const options = {
       headers: new HttpHeaders({
-        'Authorization': 'Bearer '
-      })
+        'Authorization': 'Bearer ' + token
+      }),
     }
-    return this.http.get<User>('https://dummyjson.com/user/me')//.pipe(tap(data => console.log(JSON.stringify(data))),
-    //   catchError(this.handleError)
-    // )
+      return this.http.get<User>('https://dummyjson.com/user/me', options).pipe(tap(data => console.log(JSON.stringify(data))),
+      catchError(this.handleError)
+    )
   }
 
   handleError(err: HttpErrorResponse) {

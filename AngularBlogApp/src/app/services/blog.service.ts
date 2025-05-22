@@ -10,12 +10,10 @@ export class BlogService {
 
   constructor(private http: HttpClient) { }
 
-  public getBlogs(): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
-    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts').pipe(tap(data => console.log(JSON.stringify(data))),
-      catchError(this.handleError)
-    )
+  public getBlogs(userId:string = ''): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
+    console.log("service: " + userId)
+    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts' + userId)
   }
-
   handleError(err: HttpErrorResponse) {
     let errorMessage = ''
     if (err.error instanceof ErrorEvent) {

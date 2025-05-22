@@ -1,1 +1,17 @@
-<p>user works!</p>
+<section *ngIf="authUser">
+  <p-card
+    header="{{ authUser.firstName + ' ' + authUser.lastName }}"
+    subheader="{{ authUser.role }}"
+  >
+    <ng-template pTemplate="header">
+      <img alt="Card" src="{{ authUser.image }}" />
+    </ng-template>
+    <p>Email: {{ authUser.email }}</p>
+    <p>
+      Address:
+      {{ authUser.address.address }} - {{ authUser.address.city }} -
+      {{ authUser.address.state }}
+    </p>
+    <p>University: {{ authUser.university }}</p>
+  </p-card>
+</section>

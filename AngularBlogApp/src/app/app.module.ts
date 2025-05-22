@@ -9,6 +9,8 @@ import { DenemeComponent } from "./components/deneme/deneme.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { HomepageComponent } from "./pages/homepage/homepage.component";
 import { provideHttpClient } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { userReducer } from './store/user/user.reducer';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { provideHttpClient } from '@angular/common/http';
     BrowserAnimationsModule,
     DenemeComponent,
     NavbarComponent,
-    HomepageComponent
+    HomepageComponent,
+    StoreModule.forRoot({ userState: userReducer })
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]

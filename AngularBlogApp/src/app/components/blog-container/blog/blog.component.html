@@ -1,8 +1,18 @@
-<p-card header="{{ blog.title }}" [style]="{ width: '360px' }"
-  ><ng-template pTemplate="subheader">
+<p-card [style]="{ width: '360px' }">
+  <ng-template pTemplate="header">
+    <h2
+      class="text-overflow-ellipsis text-overflow-hidden"
+      title="{{ blog.title }}"
+    >
+      {{ blog.title }}
+    </h2>
+  </ng-template>
+  <ng-template pTemplate="subheader">
     <p-badge *ngFor="let tag of blog.tags" [value]="tag" />
   </ng-template>
-  <p class="card-description">{{ blog.body }}</p>
+  <ng-template pTemplate="content" class="p-0">
+    <p class="card-description m-0">{{ blog.body }}</p>
+  </ng-template>
   <ng-template pTemplate="footer">
     <div class="flex gap-3 mt-1">
       <p-button

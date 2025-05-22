@@ -1,4 +1,14 @@
-.card-description {
-  height: 120px;
-  overflow-y: scroll;
+h2 {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 20px 20px 0 20px;
+  margin: 0;
+  .p-card {
+    .p-card-content {
+      padding: 0 !important;
+    }
+  }
+}
+.p-card-content {
+  padding: 0;
 }

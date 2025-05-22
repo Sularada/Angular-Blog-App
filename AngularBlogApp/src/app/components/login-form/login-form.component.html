@@ -1,1 +1,37 @@
-<p>login-form works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="text-900 text-3xl font-medium mb-3">Login</div>
+  <div>
+    <label for="username" class="block text-900 font-medium mb-2"
+      >Username</label
+    >
+    <input
+      type="text"
+      class="w-full mb-3"
+      id="username"
+      required
+      formControlName="username"
+      name="username"
+    />
+  </div>
+  <div>
+    <label for="password" class="block text-900 font-medium mb-2"
+      >Password</label
+    >
+    <input
+      type="password"
+      id="password"
+      formControlName="password"
+      name="password"
+      class="w-full mb-3"
+      required
+    />
+  </div>
+  <button
+    type="submit"
+    [disabled]="loginForm.invalid"
+    icon="pi pi-user"
+    class="w-full"
+  >
+    Sign In
+  </button>
+</form>

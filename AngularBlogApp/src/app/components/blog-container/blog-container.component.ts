@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BlogComponent } from "./blog/blog.component";
 import { CommonModule } from '@angular/common';
 import { Blog } from './blog/blog';
@@ -13,10 +13,12 @@ import { BlogService } from 'src/app/services/blog.service';
 })
 export class BlogContainerComponent {
   blogs: Blog[] = [];
+  @Input() userId!: string;
   constructor(private blogService: BlogService) { }
 
 
-  public ngOnInit(): void {
-    this.blogService.getBlogs().subscribe((blogs: { posts: Blog[], total: number, skip: number, limit: number }) => this.blogs = blogs.posts)
+  public ngOnChanges(): void {
+
+    this.blogService.getBlogs(this.userId).subscribe((blogs: { posts: Blog[], total: number, skip: number, limit: number }) => this.blogs = blogs.posts)
   }
 }
