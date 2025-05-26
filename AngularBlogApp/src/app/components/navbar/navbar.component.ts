@@ -9,29 +9,57 @@ import { UserService } from 'src/app/services/user.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { logout } from '../../store/user/user.actions';
+import { User } from '../user/user';
+import { MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [ThemeComponent, MenubarModule, CommonModule, BadgeModule, AvatarModule],
+  imports: [ThemeComponent, MenubarModule, CommonModule, BadgeModule, AvatarModule, MenuModule, ButtonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
   constructor(private userService: UserService, private store: Store<{ userState: Boolean }>) { }
-  items: MenuItem[] = [];
+  items: MenuItem[];
+  navbarEnd: MenuItem[];
+  user: User;
   isUserLogged$: Observable<Boolean> = this.store.select('userState');
 
   logout() {
     this.userService.Logout();
     this.store.dispatch(logout());
   }
-
   ngOnInit() {
+    if (this.isUserLogged$) {
+      this.userService.getUser().subscribe(
+        { next: (value: User) => this.user = value }
+      )
+    } else {
+      this.user = null
+    }
+
     this.items = [
       {
         label: 'Home',
         icon: 'pi pi-home',
         link: '',
+      }
+    ]
+    this.navbarEnd = [
+      {
+        items: [
+          {
+            label: 'Profile',
+            icon: 'pi pi-user',
+            route: '/user'
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out', route: "/",
+            func: true,
+          },
+        ]
       }
     ]
 

@@ -123,14 +123,40 @@
           placeholder="Search"
           class="w-8rem sm:w-auto h-full"
         />
-        <a [routerLink]="['/user']">
-          <div *ngIf="(isUserLogged$ | async) === true">
+        <div *ngIf="(isUserLogged$ | async) === true">
+          <p-menu #menu [model]="navbarEnd" [popup]="true">
+            <ng-template pTemplate="item" let-item>
+              <ng-container *ngIf="!item.func; else elseBlock">
+                <a [routerLink]="item.route" class="p-menuitem-link">
+                  <span [class]="item.icon"></span>
+                  <span class="ml-2">{{ item.label }}</span>
+                </a>
+              </ng-container>
+              <ng-template #elseBlock>
+                <a
+                  [routerLink]="item.route"
+                  class="p-menuitem-link"
+                  (click)="logout()"
+                >
+                  <span [class]="item.icon"></span>
+                  <span class="ml-2">{{ item.label }}</span>
+                </a>
+              </ng-template>
+            </ng-template>
+          </p-menu>
+          <p-button (onClick)="menu.toggle($event)" class="profile p-0">
+            <ng-template pTemplate="icon">
+              <img [src]="user.image" width="50" height="50" />
+            </ng-template>
+          </p-button>
+          <!-- 
+          <div>
             <p-avatar
               image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
               shape="circle"
             />
-          </div>
-        </a>
+          </div> -->
+        </div>
         <a
           [routerLink]="['/login']"
           class="p-button font-bold no-underline"
