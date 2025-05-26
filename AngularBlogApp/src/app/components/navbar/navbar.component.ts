@@ -31,14 +31,15 @@ export class NavbarComponent {
     this.store.dispatch(logout());
   }
   ngOnInit() {
-    if (this.isUserLogged$) {
-      this.userService.getUser().subscribe(
-        { next: (value: User) => this.user = value }
-      )
-    } else {
-      this.user = null
-    }
-
+    this.isUserLogged$.subscribe((isLoged) => {
+      if (isLoged) {
+        this.userService.getUser().subscribe(
+          { next: (value: User) => this.user = value }
+        )
+      } else {
+        this.user = null
+      }
+    })
     this.items = [
       {
         label: 'Home',
@@ -62,6 +63,5 @@ export class NavbarComponent {
         ]
       }
     ]
-
   }
 }

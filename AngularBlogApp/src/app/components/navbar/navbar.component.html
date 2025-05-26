@@ -145,9 +145,10 @@
             </ng-template>
           </p-menu>
           <p-button (onClick)="menu.toggle($event)" class="profile p-0">
-            <ng-template pTemplate="icon">
+            <!-- <ng-template pTemplate="icon">
               <img [src]="user.image" width="50" height="50" />
-            </ng-template>
+            </ng-template> -->
+            <p-avatar [image]="user.image" shape="circle" />
           </p-button>
           <!-- 
           <div>
@@ -163,14 +164,6 @@
           *ngIf="(isUserLogged$ | async) === false"
         >
           Login
-        </a>
-        <a
-          [routerLink]="['/']"
-          class="p-button font-bold no-underline"
-          *ngIf="(isUserLogged$ | async) === true"
-          (click)="logout()"
-        >
-          Logout
         </a>
         <app-theme></app-theme>
       </div>
