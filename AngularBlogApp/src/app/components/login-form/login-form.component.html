@@ -1,10 +1,11 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<form novalidate [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="text-900 text-3xl font-medium mb-3">Login</div>
   <div>
     <label for="username" class="block text-900 font-medium mb-2"
       >Username</label
     >
     <input
+      pInputText
       type="text"
       class="w-full mb-3"
       id="username"
@@ -12,12 +13,24 @@
       formControlName="username"
       name="username"
     />
+    <div
+      class="error"
+      *ngIf="
+        loginForm.controls.username.touched &&
+        loginForm.controls.username.errors as userErrors
+      "
+    >
+      <div *ngIf="userErrors['required']">* Username is required</div>
+      <div *ngIf="userErrors['minlength']">* Should have minlength 2</div>
+    </div>
   </div>
   <div>
     <label for="password" class="block text-900 font-medium mb-2"
       >Password</label
     >
     <input
+      pInputText
+      class="ng-invalid ng-touched"
       type="password"
       id="password"
       formControlName="password"
@@ -25,12 +38,26 @@
       class="w-full mb-3"
       required
     />
+    <div
+      class="error"
+      *ngIf="
+        loginForm.controls.password.touched &&
+        loginForm.controls.password.errors as passwordErrors
+      "
+    >
+      <div *ngIf="passwordErrors['required']">* Password is required</div>
+      <div *ngIf="passwordErrors['minlength']">* Should have minlength 6</div>
+    </div>
   </div>
+  <p-toast />
   <button
+    severity="primary"
+    pButton
+    pRipple
     type="submit"
     [disabled]="loginForm.invalid"
-    icon="pi pi-user"
-    class="w-full"
+    icon="pi pi-sign-in"
+    class=""
   >
     Sign In
   </button>

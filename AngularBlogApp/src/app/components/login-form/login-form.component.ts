@@ -6,17 +6,23 @@ import { UserService } from 'src/app/services/user.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { login } from '../../store/user/user.actions';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, ToastModule],
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.scss'
+  styleUrl: './login-form.component.scss',
+  providers: [MessageService]
 })
 export class LoginFormComponent {
   constructor(private userService: UserService, private router: Router,
-    private store: Store<{ userState: Boolean }>
-  ) {}
+    private store: Store<{ userState: Boolean }>, private messageService: MessageService
+  ) { }
   userState: Observable<Boolean> = this.store.select('userState');
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -31,9 +37,10 @@ export class LoginFormComponent {
         localStorage.setItem("accessToken", user.accessToken);
         this.router.navigate(['']);
         this.store.dispatch(login())
+
       },
       error: () => {
-        alert("Giriş başarısız! Lütfen kullanıcı adı ve şifrenizi kontrol edin.");
+        this.messageService.add({ severity: 'error', summary: 'Login Error', detail: 'Username or password is incorrect! Please check and try again.' });
       }
     })
   }
