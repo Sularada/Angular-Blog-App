@@ -4,11 +4,12 @@ import { CardModule } from 'primeng/card';
 import { Blog } from './blog';
 import { BadgeModule } from 'primeng/badge';
 import { CommonModule } from '@angular/common';
+import { CommentComponent } from "../../comment/comment.component";
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CardModule, Button, BadgeModule, CommonModule],
+  imports: [CardModule, Button, BadgeModule, CommonModule, CommentComponent],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })

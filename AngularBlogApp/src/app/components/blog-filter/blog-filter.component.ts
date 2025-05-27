@@ -3,9 +3,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { Observable } from 'rxjs';
 import { TreeSelectModule } from 'primeng/treeselect';
-import { setBothInputs, setOrderInput, setSearchInput } from 'src/app/store/blog-filter/blogFilter.actions';
+import { setBothInputs } from 'src/app/store/blog-filter/blogFilter.actions';
 
 @Component({
   selector: 'app-blog-filter',
@@ -32,7 +31,7 @@ export class BlogFilterComponent {
     orderInput: new FormControl('')
   })
   onSubmit() {
-    this.store.dispatch(setBothInputs({ search: this.filterForm.get('searchInput')?.value, order: this.filterForm.value.orderInput['key'] }))
+    this.store.dispatch(setBothInputs({ search: this.filterForm.get('searchInput')?.value, order: this.filterForm.value.orderInput['key'] || '' }))
   }
   clearFilters() {
     this.store.dispatch(setBothInputs({ search: '', order: '' }))

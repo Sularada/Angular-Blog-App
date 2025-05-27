@@ -14,14 +14,30 @@
     <p class="card-description m-0">{{ blog.body }}</p>
   </ng-template>
   <ng-template pTemplate="footer">
-    <div class="flex gap-3 mt-1">
-      <p-button
-        label="Cancel"
-        severity="secondary"
-        class="w-full"
-        styleClass="w-full"
-      />
-      <p-button label="Save" class="w-full" styleClass="w-full" />
+    <div class="flex flex-nowrap gap-3 mt-1 justify-content-between">
+      <div class="flex flex-nowrap gap-3">
+        <span class="flex flex-nowrap align-items-center"
+          ><p-button
+            icon="pi pi-thumbs-up"
+            [rounded]="true"
+            severity="primary"
+            [outlined]="true"
+            class="mr-2"
+          />
+          {{ blog.reactions.likes }}
+        </span>
+        <span class="flex flex-nowrap align-items-center"
+          ><p-button
+            icon="pi pi-thumbs-down"
+            [rounded]="true"
+            severity="primary"
+            [outlined]="true"
+            class="mr-2"
+          />
+          {{ blog.reactions.dislikes }}
+        </span>
+      </div>
+      <app-comment [userId]="blog.userId"></app-comment>
     </div>
   </ng-template>
 </p-card>

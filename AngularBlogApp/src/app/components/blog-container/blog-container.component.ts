@@ -1,9 +1,6 @@
 import {
-  ChangeDetectorRef,
   Component,
   Input,
-  OnInit,
-  OnDestroy
 } from '@angular/core';
 import { BlogComponent } from "./blog/blog.component";
 import { CommonModule } from '@angular/common';
@@ -13,40 +10,41 @@ import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   combineLatest,
-  Subscription
+  Observable
 } from 'rxjs';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-blog-container',
   standalone: true,
-  imports: [BlogComponent, CommonModule],
+  imports: [BlogComponent, CommonModule, PaginatorModule],
   templateUrl: './blog-container.component.html',
   styleUrl: './blog-container.component.scss'
 })
-export class BlogContainerComponent implements OnInit, OnDestroy {
+export class BlogContainerComponent {
 
   blogs: Blog[] = [];
-
-  // userId artık observable olarak takip ediliyor
+  first: number = 0;
+  rows: number = 10;
+  total: number;
+  filterInputs: Observable<{ search: string, order: string }>;
   private userId$ = new BehaviorSubject<string>('');
+  asd = this.userId$.asObservable()
 
   @Input() set userId(value: string) {
     this.userId$.next(value);
   }
 
-  private subscription!: Subscription;
-
   constructor(
     private blogService: BlogService,
-    private store: Store<{ blogFilter: { search: string, order: string } }>,
-    private cdr: ChangeDetectorRef
+    private store: Store<{ blogFilter: { search: string, order: string } }>
   ) { }
 
   ngOnInit(): void {
-    const filterInputs = this.store.select('blogFilter');
-    this.subscription = combineLatest([
+    this.filterInputs = this.store.select('blogFilter');
+    combineLatest([
       this.userId$,
-      filterInputs
+      this.filterInputs
     ]).subscribe(([userId, filterInputs]) => {
       this.fetchBlogs(userId, filterInputs);
     });
@@ -55,22 +53,26 @@ export class BlogContainerComponent implements OnInit, OnDestroy {
   fetchBlogs(userId: string, filterInputs: { search: string, order: string }) {
     if (!userId || userId === '') {
       this.blogService
-        .searchBlogs(userId, filterInputs.search, filterInputs.order)
+        .searchBlogs(filterInputs.search, filterInputs.order, this.rows, this.first)
         .subscribe((response) => {
           this.blogs = response.posts;
-
+          this.total = response.total
         });
     } else {
       this.blogService
-        .getBlogs(userId)
+        .getBlogs(userId, this.rows, this.first)
         .subscribe((response) => {
           this.blogs = response.posts;
 
         });
     }
   }
+  onPageChange(event: PaginatorState) {
+    this.first = event.first
+    this.rows = event.rows
+    this.filterInputs.subscribe((data) => {
+      this.fetchBlogs(this.userId, data);
+    })
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 }

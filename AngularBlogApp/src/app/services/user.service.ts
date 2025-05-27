@@ -49,17 +49,21 @@ export class UserService {
   }
   public refreshToken(): Observable<{ accessToken: string, refreshToken: string }> {
     const token = localStorage.getItem("refreshToken");
+    const url = 'https://dummyjson.com/auth/refresh';
+    const body = {
+      refreshToken: token
+    };
+
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        'refreshToken': token
       })
-    }
-    return this.http.post<{ accessToken: string, refreshToken: string }>('https://dummyjson.com/auth/refresh', options).pipe(tap(),
+    };
+
+    return this.http.post<{ accessToken: string, refreshToken: string }>(url, body, options).pipe(
+      tap(),
       catchError(this.handleError)
-    )
+    );
   }
   handleError(err: HttpErrorResponse) {
     let errorMessage = ''

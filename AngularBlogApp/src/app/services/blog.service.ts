@@ -10,12 +10,17 @@ export class BlogService {
 
   constructor(private http: HttpClient) { }
 
-  public getBlogs(userId: string = ''): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
-    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts' + userId)
+  public getBlogs(userId: string, limit: number, skip: number): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
+    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts' + userId + "&limit=" + limit + "&skip=" + skip)
   }
-  public searchBlogs(userId: string = '', searchInput: string, orderInput: string): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
-    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts' + userId + '/search?q=' + searchInput + '&sortBy=title&order=' + orderInput)
+  public searchBlogs(searchInput: string, orderInput: string, limit: number, skip: number): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
+    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts/search?q=' + searchInput + '&sortBy=title&order=' + orderInput + "&limit=" + limit + "&skip=" + skip)
   }
+
+  public getBlogComments(userId: number) {
+    return this.http.get<{ comments: Comment[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts/' + userId + "/comments")
+  }
+
   handleError(err: HttpErrorResponse) {
     let errorMessage = ''
     if (err.error instanceof ErrorEvent) {
