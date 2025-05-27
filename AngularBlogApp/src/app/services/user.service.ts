@@ -28,21 +28,39 @@ export class UserService {
   }
 
   public Logout(): void {
-    localStorage.setItem("accessToken",'');
+    localStorage.setItem("accessToken", '');
+    localStorage.setItem("refreshToken", '');
   }
 
-  public getUser():Observable<User>{
-      const token = localStorage.getItem("accessToken");
-       const options = {
+  public getUser(): Observable<User> {
+    this.refreshToken().subscribe((data) => {
+      localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("accessToken", data.accessToken);
+    })
+    const token = localStorage.getItem("accessToken");
+    const options = {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + token
       }),
     }
-      return this.http.get<User>('https://dummyjson.com/user/me', options).pipe(tap(data => console.log(JSON.stringify(data))),
+    return this.http.get<User>('https://dummyjson.com/user/me', options).pipe(tap(),
       catchError(this.handleError)
     )
   }
-
+  public refreshToken(): Observable<{ accessToken: string, refreshToken: string }> {
+    const token = localStorage.getItem("refreshToken");
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        'refreshToken': token
+      })
+    }
+    return this.http.post<{ accessToken: string, refreshToken: string }>('https://dummyjson.com/auth/refresh', options).pipe(tap(),
+      catchError(this.handleError)
+    )
+  }
   handleError(err: HttpErrorResponse) {
     let errorMessage = ''
     if (err.error instanceof ErrorEvent) {

@@ -117,13 +117,8 @@
     </ng-template>
     <ng-template pTemplate="end">
       <div class="navbar-end">
-        <input
-          type="text"
-          pInputText
-          placeholder="Search"
-          class="w-8rem sm:w-auto h-full"
-        />
-        <div *ngIf="(isUserLogged$ | async) === true">
+        <app-theme></app-theme>
+        <div *ngIf="(isUserLogged$ | async) === true && user">
           <p-menu #menu [model]="navbarEnd" [popup]="true">
             <ng-template pTemplate="item" let-item>
               <ng-container *ngIf="!item.func; else elseBlock">
@@ -144,19 +139,15 @@
               </ng-template>
             </ng-template>
           </p-menu>
-          <p-button (onClick)="menu.toggle($event)" class="profile p-0">
-            <!-- <ng-template pTemplate="icon">
-              <img [src]="user.image" width="50" height="50" />
-            </ng-template> -->
-            <p-avatar [image]="user.image" shape="circle" />
-          </p-button>
-          <!-- 
-          <div>
-            <p-avatar
-              image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-              shape="circle"
-            />
-          </div> -->
+          <button
+            pButton
+            (click)="menu.toggle($event)"
+            class="p-button p-0 profile flex items-center"
+          >
+            <p-avatar [image]="user.image" shape="circle"></p-avatar>
+            <h4 class="ml-2 my-2">{{ user.firstName }}</h4>
+            <i class="pi pi-chevron-down ml-2"></i>
+          </button>
         </div>
         <a
           [routerLink]="['/login']"
@@ -165,7 +156,6 @@
         >
           Login
         </a>
-        <app-theme></app-theme>
       </div>
     </ng-template>
   </p-menubar>

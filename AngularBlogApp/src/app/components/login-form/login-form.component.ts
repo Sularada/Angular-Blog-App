@@ -35,6 +35,7 @@ export class LoginFormComponent {
     this.userService.login(this.loginForm.value.username!, this.loginForm.value.password!).subscribe({
       next: user => {
         localStorage.setItem("accessToken", user.accessToken);
+        localStorage.setItem("refreshToken", user.refreshToken);
         this.router.navigate(['']);
         this.store.dispatch(login())
 

@@ -11,7 +11,7 @@ import { HomepageComponent } from "./pages/homepage/homepage.component";
 import { provideHttpClient } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from './store/user/user.reducer';
-
+import { blogReducer } from './store/blog-filter/blogFilter.reducer';
 @NgModule({
   declarations: [
     AppComponent
@@ -23,7 +23,7 @@ import { userReducer } from './store/user/user.reducer';
     DenemeComponent,
     NavbarComponent,
     HomepageComponent,
-    StoreModule.forRoot({ userState: userReducer })
+    StoreModule.forRoot({ userState: userReducer, blogFilter: blogReducer })
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]

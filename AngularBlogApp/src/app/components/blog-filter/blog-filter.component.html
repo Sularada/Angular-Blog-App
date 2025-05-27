@@ -1,0 +1,44 @@
+<h4>Filters</h4>
+<form novalidate [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+  <div>
+    <input
+      pInputText
+      type="text"
+      class="w-full mb-3"
+      formControlName="searchInput"
+      name="searchInput"
+      placeholder="Search posts"
+    />
+  </div>
+  <div>
+    <p-treeSelect
+      class="w-full"
+      containerStyleClass="w-full"
+      formControlName="orderInput"
+      [options]="nodes"
+      placeholder="Sort Posts"
+    />
+  </div>
+  <div class="flex flex-wrap gap-2 mt-3 justify-content-between">
+    <button
+      class="flex gap-2"
+      severity="primary"
+      pButton
+      pRipple
+      type="submit"
+      icon="pi pi-filter-fill"
+    >
+      Apply Filters
+    </button>
+    <button
+      class="flex gap-2"
+      (click)="clearFilters()"
+      severity="primary"
+      pButton
+      pRipple
+      icon="pi pi-filter-slash"
+    >
+      Clear Filters
+    </button>
+  </div>
+</form>

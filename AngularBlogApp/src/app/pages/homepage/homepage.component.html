@@ -1,2 +1,9 @@
-<main><app-blog-container  [userId]="userId" ></app-blog-container></main>
+<main class="grid">
+  <div class="col-12 md:col-4 lg:col-3">
+    <app-blog-filter></app-blog-filter>
+  </div>
+  <div class="col-12 md:col-8 lg:col-9">
+    <app-blog-container [userId]="userId"></app-blog-container>
+  </div>
+</main>
 <footer></footer>
