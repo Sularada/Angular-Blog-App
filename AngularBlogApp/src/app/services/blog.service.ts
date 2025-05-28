@@ -10,8 +10,8 @@ export class BlogService {
 
   constructor(private http: HttpClient) { }
 
-  public getBlogs(userId: string, limit: number, skip: number): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
-    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts' + userId + "&limit=" + limit + "&skip=" + skip)
+  public getBlogs(userId: number, limit: number, skip: number): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
+    return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts/user/' + userId + "?limit=" + limit + "&skip=" + skip)
   }
   public searchBlogs(searchInput: string, orderInput: string, limit: number, skip: number): Observable<{ posts: Blog[], total: number, skip: number, limit: number }> {
     return this.http.get<{ posts: Blog[], total: number, skip: number, limit: number }>('https://dummyjson.com/posts/search?q=' + searchInput + '&sortBy=title&order=' + orderInput + "&limit=" + limit + "&skip=" + skip)

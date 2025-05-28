@@ -1,9 +1,8 @@
 <div class="grid">
-     <div class="col-12 md:col-6 lg:col-3">
-        <app-user></app-user>
-     </div>
-       <div class="col-12 md:col-6 lg:col-9">
-      
-        <app-blog-container [userId]="userId"></app-blog-container>
-       </div>
+  <div class="col-12 md:col-6 lg:col-3">
+    <app-user></app-user>
+  </div>
+  <div class="col-12 md:col-6 lg:col-9" *ngIf="userId | async">
+    <app-blog-container [userId]="userId"></app-blog-container>
+  </div>
 </div>

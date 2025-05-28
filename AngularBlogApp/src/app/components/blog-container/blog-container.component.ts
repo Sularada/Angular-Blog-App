@@ -8,7 +8,6 @@ import { Blog } from './blog/blog';
 import { BlogService } from 'src/app/services/blog.service';
 import { Store } from '@ngrx/store';
 import {
-  BehaviorSubject,
   combineLatest,
   Observable
 } from 'rxjs';
@@ -28,13 +27,9 @@ export class BlogContainerComponent {
   rows: number = 10;
   total: number;
   filterInputs: Observable<{ search: string, order: string }>;
-  private userId$ = new BehaviorSubject<string>('');
-  asd = this.userId$.asObservable()
 
-  @Input() set userId(value: string) {
-    this.userId$.next(value);
-  }
-
+  @Input() userId?: Observable<number>;
+  userIdConst: number;
   constructor(
     private blogService: BlogService,
     private store: Store<{ blogFilter: { search: string, order: string } }>
@@ -42,16 +37,22 @@ export class BlogContainerComponent {
 
   ngOnInit(): void {
     this.filterInputs = this.store.select('blogFilter');
+    console.log("User id: " + this.userId)
     combineLatest([
-      this.userId$,
+      this.userId,
       this.filterInputs
     ]).subscribe(([userId, filterInputs]) => {
       this.fetchBlogs(userId, filterInputs);
+      this.userIdConst = userId;
     });
+
   }
 
-  fetchBlogs(userId: string, filterInputs: { search: string, order: string }) {
-    if (!userId || userId === '') {
+  fetchBlogs(userId: number, filterInputs: { search: string, order: string }, isFilterChange: boolean = true) {
+    if (isFilterChange) {
+      this.first = 0
+    }
+    if (userId === -1) {
       this.blogService
         .searchBlogs(filterInputs.search, filterInputs.order, this.rows, this.first)
         .subscribe((response) => {
@@ -63,7 +64,6 @@ export class BlogContainerComponent {
         .getBlogs(userId, this.rows, this.first)
         .subscribe((response) => {
           this.blogs = response.posts;
-
         });
     }
   }
@@ -71,8 +71,7 @@ export class BlogContainerComponent {
     this.first = event.first
     this.rows = event.rows
     this.filterInputs.subscribe((data) => {
-      this.fetchBlogs(this.userId, data);
+      this.fetchBlogs(this.userIdConst, data, false);
     })
-
   }
 }

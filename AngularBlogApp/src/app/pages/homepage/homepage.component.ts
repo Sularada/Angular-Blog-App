@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { BlogContainerComponent } from "../../components/blog-container/blog-container.component";
 import { BlogFilterComponent } from "../../components/blog-filter/blog-filter.component";
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
@@ -12,5 +13,5 @@ import { BlogFilterComponent } from "../../components/blog-filter/blog-filter.co
 })
 export class HomepageComponent {
   constructor() { }
-  userId: string = ""
+  userId: Observable<number> = of(-1);
 }
