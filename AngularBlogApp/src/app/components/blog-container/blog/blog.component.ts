@@ -5,14 +5,27 @@ import { Blog } from './blog';
 import { BadgeModule } from 'primeng/badge';
 import { CommonModule } from '@angular/common';
 import { CommentComponent } from "../../comment/comment.component";
+import { BlogService } from 'src/app/services/blog.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CardModule, Button, BadgeModule, CommonModule, CommentComponent],
+  imports: [CardModule, Button, BadgeModule, CommonModule, CommentComponent, ToastModule],
   templateUrl: './blog.component.html',
-  styleUrl: './blog.component.scss'
+  styleUrl: './blog.component.scss',
+  providers: [MessageService]
 })
 export class BlogComponent {
+  constructor(private blogService: BlogService, private messageService: MessageService) { }
   @Input() blog!: Blog;
+  @Input() userId!: number;
+  deleteBlog(id: number) {
+    if (this.blogService.deleteBlog(id)) {
+      this.messageService.add({ severity: 'success', summary: 'Delete Blog Success', detail: 'Blog  delete successfully' });
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Delete Blog Error', detail: 'Blog can not delete! Please try again.' });
+    }
+  }
 }

@@ -3,10 +3,10 @@ export type Blog = {
     title: string,
     body: string,
     tags: Array<string>,
-    reactions: {
+    reactions?: {
         likes: number,
         dislikes: number
     },
-    views: number,
+    views?: number,
     userId: number
 }

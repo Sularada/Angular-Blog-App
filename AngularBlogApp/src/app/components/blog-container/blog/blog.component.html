@@ -1,14 +1,24 @@
 <p-card>
+  <p-toast />
   <ng-template pTemplate="header">
-    <h2
-      class="text-overflow-ellipsis text-overflow-hidden"
-      title="{{ blog.title }}"
-    >
-      {{ blog.title }}
-    </h2>
+    <div class="flex justify-content-between">
+      <h2
+        class="text-overflow-ellipsis text-overflow-hidden"
+        title="{{ blog.title }}"
+      >
+        {{ blog.title }}
+      </h2>
+      <p-button
+        class="m-2"
+        *ngIf="userId != -1"
+        icon="pi pi-times"
+        severity="danger"
+        (onClick)="deleteBlog(blog.id)"
+      />
+    </div>
   </ng-template>
-  <ng-template pTemplate="subheader">
-    <p-badge *ngFor="let tag of blog.tags" [value]="tag" />
+  <ng-template pTemplate="subtitle">
+    <p-badge *ngFor="let tag of blog.tags" [value]="tag" class="mr-2" />
   </ng-template>
   <ng-template pTemplate="content" class="p-0">
     <p class="card-description m-0">{{ blog.body }}</p>

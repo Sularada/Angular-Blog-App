@@ -12,11 +12,12 @@ import {
   Observable
 } from 'rxjs';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { AddBlogFormComponent } from "../add-blog-form/add-blog-form.component";
 
 @Component({
   selector: 'app-blog-container',
   standalone: true,
-  imports: [BlogComponent, CommonModule, PaginatorModule],
+  imports: [BlogComponent, CommonModule, PaginatorModule, AddBlogFormComponent],
   templateUrl: './blog-container.component.html',
   styleUrl: './blog-container.component.scss'
 })

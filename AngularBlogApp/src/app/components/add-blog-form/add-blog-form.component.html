@@ -1,0 +1,78 @@
+<div class="card flex justify-content-center">
+  <p-toast />
+  <p-sidebar [(visible)]="sidebarVisible" position="right">
+    <h3>Add New Blog</h3>
+    <label for="tags" class="w-full">Select Tags</label>
+    <div *ngIf="tags" class="mt-2">
+      <div class="card flex justify-content-center w-full">
+        <p-multiSelect
+          class="w-full"
+          [options]="tags"
+          [(ngModel)]="selectedTags"
+          placeholder="Select Cities"
+          optionLabel="name"
+          display="chip"
+          [showClear]="true"
+        />
+      </div>
+    </div>
+    <form [formGroup]="addNewBlogForm" (ngSubmit)="onSubmit()">
+      <div class="mt-2">
+        <label for="title" class="w-full">Title</label>
+        <input
+          class="ng-invalid ng-touched"
+          pInputText
+          id="title"
+          formControlName="title"
+          class="w-full mt-2"
+        />
+        <div
+          class="error"
+          *ngIf="
+            addNewBlogForm.controls.title.touched &&
+            addNewBlogForm.controls.title.errors as titleErrors
+          "
+        >
+          <div *ngIf="titleErrors['required']">* Title is required</div>
+          <div *ngIf="titleErrors['minlength']">
+            * Should have min 15 characters
+          </div>
+        </div>
+      </div>
+      <div class="mt-2">
+        <label for="body" class="w-full">Description</label>
+        <textarea
+          class="ng-invalid ng-touched"
+          pInputTextarea
+          id="body"
+          formControlName="body"
+          class="w-full mt-2"
+          rows="5"
+          cols="30"
+        ></textarea>
+        <div
+          class="error"
+          *ngIf="
+            addNewBlogForm.controls.body.touched &&
+            addNewBlogForm.controls.body.errors as bodyErrors
+          "
+        >
+          <div *ngIf="bodyErrors['required']">* Description is required</div>
+          <div *ngIf="bodyErrors['minlength']">
+            * Should have min 50 characters
+          </div>
+        </div>
+      </div>
+
+      <button
+        [disabled]="addNewBlogForm.invalid"
+        pButton
+        type="submit"
+        class="mt-2 ml-auto block"
+      >
+        Save
+      </button>
+    </form>
+  </p-sidebar>
+  <p-button (onClick)="sidebarVisible = true" icon="pi pi-plus" class="my-2" />
+</div>
