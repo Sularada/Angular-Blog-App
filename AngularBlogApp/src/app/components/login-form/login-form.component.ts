@@ -34,11 +34,9 @@ export class LoginFormComponent {
     this.submitted = true;
     this.userService.login(this.loginForm.value.username!, this.loginForm.value.password!).subscribe({
       next: user => {
-        localStorage.setItem("accessToken", user.accessToken);
-        localStorage.setItem("refreshToken", user.refreshToken);
         this.router.navigate(['']);
         this.store.dispatch(login())
-
+        this.messageService.add({ severity: 'success', summary: 'Login Success', detail: 'Login successfully' });
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Login Error', detail: 'Username or password is incorrect! Please check and try again.' });

@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthenticatedUser, User } from '../components/user/user';
 
 @Injectable({
@@ -10,6 +10,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  isloggedIn: Boolean = false
+
   public login(username: string, password: string): Observable<AuthenticatedUser> {
     const user = { username: username, password: password };
     const options = {
@@ -17,41 +19,39 @@ export class UserService {
         'Content-Type': 'application/json'
       }),
     }
-    return this.http.post<AuthenticatedUser>('https://dummyjson.com/user/login', user, options).pipe(tap(data => console.log(JSON.stringify(data))),
-      catchError(this.handleError)
-    )
+    return this.http.post<AuthenticatedUser>('https://dummyjson.com/user/login', user, options).pipe(map(response => {
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
+      this.isloggedIn = true;
+      return response;
+    }))
   }
 
   public isUserLogged(): Boolean {
-    const token = localStorage.getItem("accessToken")
-    return token && token !== '' ? true : false;
+    return this.isloggedIn
   }
 
   public Logout(): void {
+    this.isloggedIn = false;
     localStorage.setItem("accessToken", '');
     localStorage.setItem("refreshToken", '');
   }
 
   public getUser(): Observable<User> {
-    this.refreshToken().subscribe((data) => {
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("accessToken", data.accessToken);
-    })
     const token = localStorage.getItem("accessToken");
     const options = {
       headers: new HttpHeaders({
         'Authorization': 'Bearer ' + token
       }),
     }
-    return this.http.get<User>('https://dummyjson.com/user/me', options).pipe(tap(),
-      catchError(this.handleError)
-    )
+    return this.http.get<User>('https://dummyjson.com/user/me', options);
   }
   public refreshToken(): Observable<{ accessToken: string, refreshToken: string }> {
     const token = localStorage.getItem("refreshToken");
     const url = 'https://dummyjson.com/auth/refresh';
     const body = {
-      refreshToken: token
+      refreshToken: token,
+      expiresInMins: 1,
     };
 
     const options = {
@@ -60,18 +60,12 @@ export class UserService {
       })
     };
 
-    return this.http.post<{ accessToken: string, refreshToken: string }>(url, body, options).pipe(
-      tap(),
-      catchError(this.handleError)
-    );
+    return this.http.post<{ accessToken: string, refreshToken: string }>(url, body, options).pipe(map((response) => {
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
+      console.log("token process")
+      return response;
+    }))
   }
-  handleError(err: HttpErrorResponse) {
-    let errorMessage = ''
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = 'Bir hata oluştu ' + err.error.message
-    } else {
-      errorMessage = 'Sistemsel bir hata oluştu'
-    }
-    return throwError(() => new Error(errorMessage));
-  }
+
 }

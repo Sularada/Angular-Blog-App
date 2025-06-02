@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ThemeComponent } from "./theme/theme.component";
 import { MenubarModule } from 'primeng/menubar';
 import { CommonModule } from '@angular/common';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { UserService } from 'src/app/services/user.service';
@@ -17,10 +17,11 @@ import { ButtonModule } from 'primeng/button';
   standalone: true,
   imports: [ThemeComponent, MenubarModule, CommonModule, BadgeModule, AvatarModule, MenuModule, ButtonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
+  providers: [MessageService]
 })
 export class NavbarComponent {
-  constructor(private userService: UserService, private store: Store<{ userState: Boolean }>) { }
+  constructor(private userService: UserService, private store: Store<{ userState: Boolean }>, private messageService: MessageService) { }
   items: MenuItem[];
   navbarEnd: MenuItem[];
   user: User;
@@ -28,6 +29,7 @@ export class NavbarComponent {
 
   logout() {
     this.userService.Logout();
+    this.messageService.add({ severity: 'success', summary: 'Logout Success', detail: 'Logout successfully' });
     this.store.dispatch(logout());
   }
   ngOnInit() {

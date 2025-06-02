@@ -14,18 +14,20 @@ import { ToastModule } from 'primeng/toast';
   standalone: true,
   imports: [CardModule, Button, BadgeModule, CommonModule, CommentComponent, ToastModule],
   templateUrl: './blog.component.html',
-  styleUrl: './blog.component.scss',
-  providers: [MessageService]
+  styleUrl: './blog.component.scss'
 })
 export class BlogComponent {
   constructor(private blogService: BlogService, private messageService: MessageService) { }
   @Input() blog!: Blog;
   @Input() userId!: number;
   deleteBlog(id: number) {
-    if (this.blogService.deleteBlog(id)) {
-      this.messageService.add({ severity: 'success', summary: 'Delete Blog Success', detail: 'Blog  delete successfully' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Delete Blog Error', detail: 'Blog can not delete! Please try again.' });
-    }
+    this.blogService.deleteBlog(id).subscribe((data: any) => {
+      if (data?.isDeleted) {
+        this.messageService.add({ severity: 'success', summary: 'Delete Blog Success', detail: 'Blog  delete successfully' });
+      }
+      else {
+        this.messageService.add({ severity: 'error', summary: 'Delete Blog Error', detail: 'Blog can not delete! Please try again.' });
+      }
+    })
   }
 }

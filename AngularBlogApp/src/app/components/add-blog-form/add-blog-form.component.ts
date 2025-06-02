@@ -49,11 +49,13 @@ export class AddBlogFormComponent {
   onSubmit() {
     const tags = this.selectedTags.map(tag => tag.name)
     this.newBlog = { title: this.addNewBlogForm.value.title, body: this.addNewBlogForm.value.body, tags: tags, userId: this.userId }
-    if (this.blogService.addNewBlog(this.newBlog)) {
-      this.messageService.add({ severity: 'success', summary: 'Add New Blog', detail: 'Your new blog add successfully' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Add New Blog', detail: 'Your new blog can not add! Please try again.' });
-    }
+    this.blogService.addNewBlog(this.newBlog).subscribe((data: any) => {
+      if (data != null || undefined) {
+        this.messageService.add({ severity: 'success', summary: 'Add New Blog', detail: 'Your new blog add successfully' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Add New Blog', detail: 'Your new blog can not add! Please try again.' });
+      }
+    })
     this.selectedTags = []
     this.addNewBlogForm.reset()
     this.sidebarVisible = false

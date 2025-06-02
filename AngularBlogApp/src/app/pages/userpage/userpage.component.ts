@@ -18,7 +18,6 @@ export class UserpageComponent {
 
   public ngOnInit(): void {
     this.userService.getUser().subscribe((user: User) => {
-      console.log("userid" + user.id);
       this.userId = of(user.id)
     })
   }

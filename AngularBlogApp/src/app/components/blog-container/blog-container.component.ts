@@ -38,7 +38,6 @@ export class BlogContainerComponent {
 
   ngOnInit(): void {
     this.filterInputs = this.store.select('blogFilter');
-    console.log("User id: " + this.userId)
     combineLatest([
       this.userId,
       this.filterInputs
