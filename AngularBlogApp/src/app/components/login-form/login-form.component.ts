@@ -8,13 +8,13 @@ import { Observable } from 'rxjs';
 import { login } from '../../store/user/user.actions';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { PasswordModule } from 'primeng/password';
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, ToastModule],
+  imports: [ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, ToastModule, PasswordModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
   providers: [MessageService]
@@ -38,7 +38,8 @@ export class LoginFormComponent {
         this.store.dispatch(login())
         this.messageService.add({ severity: 'success', summary: 'Login Success', detail: 'Login successfully' });
       },
-      error: () => {
+      error: (err) => {
+        console.log(err)
         this.messageService.add({ severity: 'error', summary: 'Login Error', detail: 'Username or password is incorrect! Please check and try again.' });
       }
     })

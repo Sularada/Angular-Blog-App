@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserService } from '../services/user.service';
 
 /**
@@ -20,20 +20,26 @@ export const mainInterceptor: HttpInterceptorFn = (req, next) => {
       örneğin header ekleme vb.  */
   const newRequest: HttpRequest<any> = req.clone();
   //console.log(req);
-
+  let isRefreshing = false;
+  const storedRefreshToken = localStorage.getItem('refreshToken');
   return next(newRequest).pipe(
-    // refresh token için daha sonra istek parametre olarak verilebilir
     catchError((error) => {
-      if (error.status === HttpStatusCode.Unauthorized) {
-        console.log("errror : " + error + " statu : " + error.status);
-        refreshToken.subscribe(() => {
-          return next(newRequest).pipe(catchError(error => {
-            return handleError(error, messageService)
-          }))
-        })
+      if (error.status === HttpStatusCode.Unauthorized && storedRefreshToken && !isRefreshing) {
+        isRefreshing = true;
+        return refreshToken.pipe(
+          switchMap(() => {
+            isRefreshing = false;
+            return next(newRequest);
+          }),
+          catchError(refreshError => {
+            isRefreshing = false;
+            return handleError(refreshError, messageService);
+          })
+        );
       } else {
-        return handleError(error, messageService)
+        return handleError(error, messageService);
       }
+
     })
   );
 };
