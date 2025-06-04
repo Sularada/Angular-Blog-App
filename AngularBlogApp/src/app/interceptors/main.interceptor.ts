@@ -8,6 +8,7 @@ import { inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 /**
  * Fonksiyonel (stand-alone) interceptor
@@ -27,12 +28,18 @@ export const mainInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === HttpStatusCode.Unauthorized && storedRefreshToken && !isRefreshing) {
         isRefreshing = true;
         return refreshToken.pipe(
-          switchMap(() => {
+          switchMap((tokens: { accessToken: string; refreshToken: string; }) => {
+            const updatedRequest = req.clone({
+              setHeaders: {
+                Authorization: `Bearer ${tokens.accessToken}`,
+              },
+            });
             isRefreshing = false;
-            return next(newRequest);
+            return next(updatedRequest);
           }),
           catchError(refreshError => {
             isRefreshing = false;
+            //router.navigate(['/login']);
             return handleError(refreshError, messageService);
           })
         );
@@ -82,3 +89,81 @@ export const handleError = (
 
   return throwError(() => error);
 };
+
+
+// import {
+//   HttpInterceptorFn,
+//   HttpRequest,
+//   HttpHandlerFn,
+//   HttpStatusCode,
+// } from '@angular/common/http';
+// import { inject } from '@angular/core';
+// import { MessageService } from 'primeng/api';
+// import { catchError, filter, switchMap, take, throwError } from 'rxjs';
+// import { UserService } from '../services/user.service';
+// import { Router } from '@angular/router';
+
+// export const mainInterceptor: HttpInterceptorFn = (req, next) => {
+//   const messageService = inject(MessageService);
+//   const userService = inject(UserService);
+//   const router = inject(Router);
+
+//   const accessToken = localStorage.getItem('accessToken');
+
+//   // Refresh isteklerini hariç tut
+//   if (req.url.includes('/auth/refresh')) {
+//     return next(req);
+//   }
+
+//   const authReq = req.clone({
+//     setHeaders: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+//   });
+
+//   return next(authReq).pipe(
+//     catchError((error) => {
+//       const storedRefreshToken = localStorage.getItem('refreshToken');
+
+//       if (error.status === HttpStatusCode.Unauthorized && storedRefreshToken) {
+//         if (!userService.isRefreshing) {
+//           userService.isRefreshing = true;
+//           userService.refreshTokenSubject.next(null); // temizle
+
+//           return userService.refreshToken().pipe(
+//             switchMap(tokens => {
+//               userService.isRefreshing = false;
+//               userService.refreshTokenSubject.next(tokens.accessToken);
+
+//               const retryReq = req.clone({
+//                 setHeaders: {
+//                   Authorization: `Bearer ${tokens.accessToken}`,
+//                 },
+//               });
+//               return next(retryReq);
+//             }),
+//             catchError(refreshErr => {
+//               userService.isRefreshing = false;
+//               router.navigate(['/login']);
+//               return handleError(refreshErr, messageService);
+//             })
+//           );
+//         } else {
+//           // Başka bir istek zaten refresh yapıyor, bekle
+//           return userService.refreshTokenSubject.pipe(
+//             filter(token => token !== null),
+//             take(1),
+//             switchMap((token) => {
+//               const retryReq = req.clone({
+//                 setHeaders: {
+//                   Authorization: `Bearer ${token}`,
+//                 },
+//               });
+//               return next(retryReq);
+//             })
+//           );
+//         }
+//       } else {
+//         return handleError(error, messageService);
+//       }
+//     })
+//   );
+// };

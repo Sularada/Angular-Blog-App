@@ -80,3 +80,45 @@ export class UserService {
   }
 
 }
+
+
+// import { Injectable } from '@angular/core';
+// import { BehaviorSubject, Observable, of } from 'rxjs';
+// import { HttpClient } from '@angular/common/http';
+// import { tap } from 'rxjs/operators';
+
+// @Injectable({ providedIn: 'root' })
+// export class UserService {
+//   private _isRefreshing = false;
+//   private _refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
+//   get isRefreshing(): boolean {
+//     return this._isRefreshing;
+//   }
+
+//   set isRefreshing(val: boolean) {
+//     this._isRefreshing = val;
+//   }
+
+//   get refreshTokenSubject(): BehaviorSubject<string | null> {
+//     return this._refreshTokenSubject;
+//   }
+
+//   constructor(private http: HttpClient) {}
+
+//   refreshToken(): Observable<{ accessToken: string; refreshToken: string }> {
+//     const storedRefreshToken = localStorage.getItem('refreshToken');
+//     if (!storedRefreshToken) return of(); // boş dön
+
+//     return this.http.post<{ accessToken: string; refreshToken: string }>(
+//       '/auth/refresh',
+//       { refreshToken: storedRefreshToken }
+//     ).pipe(
+//       tap(tokens => {
+//         localStorage.setItem('accessToken', tokens.accessToken);
+//         localStorage.setItem('refreshToken', tokens.refreshToken);
+//         this._refreshTokenSubject.next(tokens.accessToken);
+//       })
+//     );
+//   }
+// }

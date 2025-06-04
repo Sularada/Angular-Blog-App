@@ -33,3 +33,15 @@ html {
 .p-sidebar-right {
   width: 30rem;
 }
+.p-multiselect {
+  margin-bottom: 45px;
+  height: 38px;
+}
+.p-multiselect-label-container {
+  height: 38px;
+  position: absolute;
+  top: 48px;
+  width: 100%;
+  padding-right: 0;
+  overflow-wrap: normal;
+}
