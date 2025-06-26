@@ -17,11 +17,14 @@ import { Observable } from 'rxjs';
 })
 export class CommentComponent {
   @Input() userId: number;
-  comments: Comment[] = [];
+  comments: Comment[] = null;
   constructor(private blogService: BlogService) { }
-  ngOnInit() {
-    this.blogService.getBlogComments(this.userId).subscribe((data) => {
-      this.comments = data.comments
-    })
+  openComments(op, $event) {
+    if (this.comments == null) {
+      this.blogService.getBlogComments(this.userId).subscribe((data) => {
+        this.comments = data.comments
+      })
+    }
+    op.toggle($event)
   }
 }

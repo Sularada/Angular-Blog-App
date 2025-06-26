@@ -1,13 +1,13 @@
 <div>
   <p-button
-    (onClick)="op.toggle($event)"
+    (onClick)="openComments(op, $event)"
     icon="pi pi-comments"
     label="See Comments"
   />
   <p-overlayPanel #op class="comments">
     <div
       class="flex flex-column gap-3 w-25rem"
-      *ngIf="comments.length > 0; else noComment"
+      *ngIf="comments && comments.length > 0; else noComment"
     >
       <div>
         <span class="font-medium text-900 block mb-2">Comments</span>
@@ -33,6 +33,10 @@
         </ul>
       </div>
     </div>
-    <ng-template #noComment> No Comment </ng-template>
+    <ng-template #noComment>
+      <div class="flex flex-column gap-3 w-25rem">
+        <p>No Comment</p>
+      </div>
+    </ng-template>
   </p-overlayPanel>
 </div>
